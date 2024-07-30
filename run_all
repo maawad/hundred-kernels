@@ -1,0 +1,49 @@
+#!/bin/bash
+
+build_dir="build"
+
+usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  -d, --dir           Set build directory (default: $build_dir)"
+    echo "  -h, --help          Show this help message"
+}
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -d|--dir) build_dir="$2"; shift ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "Unknown parameter: $1"; usage; exit 1 ;;
+    esac
+    shift
+done
+
+echo "Build Directory: $build_dir"
+
+files=("$build_dir"/*_*)
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+successful_count=0
+failed_count=0
+
+for file in "${files[@]}"; do
+    if [ -x "$file" ] && [ ! -d "$file" ]; then
+        echo -n "$file - "
+        
+        output=$("$file")
+        
+        if echo "$output" | grep -q "failed"; then
+            echo -e "\t ${RED}FAILED${NC}"
+            failed_count=$((failed_count + 1))
+        else
+            echo -e "\t ${GREEN}SUCCESS${NC}"
+            successful_count=$((successful_count + 1))
+        fi
+    fi
+done
+
+echo -e "\n${GREEN}Successful tests: ${successful_count}${NC}"
+echo -e "${RED}Failed tests: ${failed_count}${NC}"

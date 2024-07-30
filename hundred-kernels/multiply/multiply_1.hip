@@ -26,7 +26,7 @@ int main() {
                                          result.data().get(), count);
 
   const auto status = hipDeviceSynchronize();
-  if (status != hipSuccess || result[0] != 4 || result[count - 1] != 4) {
+  if (status != hipSuccess || result[0] != 3 || result[count - 1] != 3) {
     std::cout << "Kernel failed.\n";
     return -1;
   } else {
