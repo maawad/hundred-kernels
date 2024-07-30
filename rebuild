@@ -1,0 +1,36 @@
+#!/bin/bash
+
+hip_arch="gfx1100"
+build_dir="build"
+build_type="Release"
+target="all"
+
+usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  -a, --arch          Set HIP architecture (default: $hip_arch)"
+    echo "  -d, --dir           Set build directory (default: $build_dir)"
+    echo "  -t, --type          Set build type (default: $build_type)"
+    echo "  -T, --target        Set build target (default: $target)"
+    echo "  -h, --help          Show this help message"
+}
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -a|--arch) hip_arch="$2"; shift ;;
+        -d|--dir) build_dir="$2"; shift ;;
+        -t|--type) build_type="$2"; shift ;;
+        -T|--target) target="$2"; shift ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "Unknown parameter: $1"; usage; exit 1 ;;
+    esac
+    shift
+done
+
+echo "HIP Architecture: $hip_arch"
+echo "Build Directory: $build_dir"
+echo "Build Type: $build_type"
+echo "Target: $target"
+
+cmake -B "$build_dir" -DCMAKE_HIP_ARCHITECTURES="$hip_arch" -DCMAKE_BUILD_TYPE="$build_type"
+cmake --build "$build_dir" --target "$target" --parallel $(nproc)
