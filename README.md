@@ -22,14 +22,29 @@ For example to compile for MI210, you can execute:
 
 
 # Run
-Currently, the follolwing binaries are aviaible:
+To run all examples,
 ```shell
-reduction_3
-reduction_2
-reduction_1
-vector_add_1
-vector_add_0
-reduction_0
+./run_all 
+```
+Which should print:
+```shell
+Build Directory: build 
+
+build/add_0 --------------------------------------- | SUCCESS
+build/add_1 --------------------------------------- | SUCCESS
+build/exclusive_scan_0 ---------------------------- | SUCCESS
+build/inclusive_scan_0 ---------------------------- | SUCCESS
+build/multiply_0 ---------------------------------- | SUCCESS
+build/multiply_1 ---------------------------------- | SUCCESS
+build/multiply_add_0 ------------------------------ | SUCCESS
+build/multiply_add_1 ------------------------------ | SUCCESS
+build/reduction_0 --------------------------------- | SUCCESS
+build/reduction_1 --------------------------------- | SUCCESS
+build/reduction_2 --------------------------------- | SUCCESS
+build/reduction_3 --------------------------------- | SUCCESS
+
+Successful tests: 12
+Failed tests: 0
 ```
 
 To run the reduction example,
@@ -38,7 +53,7 @@ To run the reduction example,
 ```
 Which on success, will print:
 ```shell
-./build/reduction_3
+Success!
 ```
 
 
