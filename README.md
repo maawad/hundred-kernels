@@ -1,10 +1,11 @@
 # Modern HIP examples
 
-A collection of modern HIP GPU kernels. The kernels are examples are numbered starting from 0 with lower numbers indicating simple kernels and higher numbers indicating more optimized kernels.
+This repository contains a collection of modern HIP GPU kernels. The kernel examples are stored in a per-problem directory, each directory containing files numbered starting from 0, with lower numbers indicating simple kernels and higher numbers indicating more optimized kernels.
+
 
 
 # Build
-Use the rebuild script to quickly rebuild the CMake-based project. The script has the following options:
+Use the [rebuild](./rebuild) script to quickly rebuild the CMake-based project. The script has the following options:
 ```shell
 Usage: ./rebuild [options]
 Options:
