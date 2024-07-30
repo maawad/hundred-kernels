@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <iostream>
 
-__global__ void vector_add(double* v_a, double* v_b, double* result,
-                           std::size_t count) {
+__global__ void multiply(double* v_a, double* v_b, double* result,
+                         std::size_t count) {
   const auto thread_id = threadIdx.x + blockIdx.x * blockDim.x;
   const auto stride = blockDim.x * gridDim.x;
 
@@ -22,8 +22,8 @@ int main() {
   const std::size_t block_size{512};
   const std::size_t num_blocks{1024};
 
-  vector_add<<<num_blocks, block_size>>>(v_a.data().get(), v_b.data().get(),
-                                         result.data().get(), count);
+  multiply<<<num_blocks, block_size>>>(v_a.data().get(), v_b.data().get(),
+                                       result.data().get(), count);
 
   const auto status = hipDeviceSynchronize();
   if (status != hipSuccess || result[0] != 3 || result[count - 1] != 3) {
