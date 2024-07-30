@@ -18,7 +18,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-echo "Build Directory: $build_dir"
+printf "Build Directory: %s \n\n" "$build_dir"
 
 files=("$build_dir"/*_*)
 
@@ -31,15 +31,18 @@ failed_count=0
 
 for file in "${files[@]}"; do
     if [ -x "$file" ] && [ ! -d "$file" ]; then
-        echo -n "$file - "
-        
+
+        dashes=$((50 - ${#file}))
+        dash_string=$(printf "%${dashes}s" | tr ' ' '-')
+        printf "%s %s | " "${file// /-}" "$dash_string"
+
         output=$("$file")
         
         if echo "$output" | grep -q "failed"; then
-            echo -e "\t ${RED}FAILED${NC}"
+            echo -e "${RED}FAILED${NC}"
             failed_count=$((failed_count + 1))
         else
-            echo -e "\t ${GREEN}SUCCESS${NC}"
+            echo -e "${GREEN}SUCCESS${NC}"
             successful_count=$((successful_count + 1))
         fi
     fi
