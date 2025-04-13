@@ -24,7 +24,7 @@ The project includes the following examples, all successfully building and runni
 
 ### Data Structures
 - `hash_map_0`: GPU hash map implementation (basic version)
-- `hash_set_0`: GPU hash set implementation (basic version, see [hash_set/README.md](hash_set/README.md) for details)
+- `hash_set_0`: GPU hash set implementation (basic version, see [hash_set/README.md](hundred-kernels/hash_set/README.md for details)
 - `histogram_0`: Parallel histogram computation (basic version)
 
 ### Parallel Algorithms
