@@ -47,17 +47,24 @@ __global__ void insert_into_hashtable(const key_type* keys,
     auto desired = key_to_insert;
 
     bool success = false;
-    while (!success) {
-      success = __hip_atomic_compare_exchange_strong(
-          &hash_table[bucket_offset + cur_rank], &expected, desired,
-          __ATOMIC_RELAXED, __ATOMIC_RELAXED, __HIP_MEMORY_SCOPE_SYSTEM);
-      bucket_index = (bucket_index + 1) % num_buckets;
-      bucket_offset = bucket_index * bucket_size;
-      if (bucket_index == initial_bucket_index && !success) {
-        break;
+    static constexpr int elected_rank = 0;
+    auto offset_wihin_bucket = 0;
+    if (cur_rank == elected_rank) {
+      while (!success) {
+        success = __hip_atomic_compare_exchange_strong(
+            &hash_table[bucket_offset + offset_wihin_bucket], &expected,
+            desired, __ATOMIC_RELAXED, __ATOMIC_RELAXED,
+            __HIP_MEMORY_SCOPE_SYSTEM);
+        offset_wihin_bucket++;
+        if (offset_wihin_bucket == bucket_size) {
+          bucket_index = (bucket_index + 1) % num_buckets;
+          bucket_offset = bucket_index * bucket_size;
+          if (bucket_index == initial_bucket_index && !success) {
+            break;
+          }
+        }
       }
     }
-
     if (tile.thread_rank() == cur_rank) {
       do_insert = false;
     }
@@ -66,7 +73,7 @@ __global__ void insert_into_hashtable(const key_type* keys,
 }
 
 int main() {
-  const std::size_t num_keys = 512;
+  const std::size_t num_keys = 1'000'000;
 
   const float load_factor = 0.5f;
   const int bucket_size = 64;
