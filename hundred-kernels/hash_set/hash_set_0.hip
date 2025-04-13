@@ -43,13 +43,13 @@ __global__ void insert_into_hashtable(const key_type* keys,
   while (work_queue) {
     auto cur_rank = __ffsll(work_queue) - 1;
     auto cur_key = tile.shfl(key_to_insert, cur_rank);
+    auto lane_id = tile.thread_rank();
     auto expected = sentinel_key;
     auto desired = key_to_insert;
 
     bool success = false;
-    static constexpr int elected_rank = 0;
     auto offset_wihin_bucket = 0;
-    if (cur_rank == elected_rank) {
+    if (cur_rank == lane_id) {
       while (!success) {
         success = __hip_atomic_compare_exchange_strong(
             &hash_table[bucket_offset + offset_wihin_bucket], &expected,
